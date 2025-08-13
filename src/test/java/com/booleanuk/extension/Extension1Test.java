@@ -1,40 +1,48 @@
 package com.booleanuk.extension;
 
-import com.booleanuk.Poker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class Extension1Test {
     @Test
     public void shouldReturnAnEmptyArray() {
-        Poker poker = new Poker();
-        String[][] hands = {new String[]{"K", "5"}, new String[]{"3", "7"}};
-        String[] result = poker.winningPairFromArray(hands);
-        Assertions.assertArrayEquals(new String[]{}, result);
+        List<Hand> hands = List.of(new Hand(List.of("K", "5")), new Hand(List.of("3", "7")));
+        Poker poker = new Poker(hands);
+        Hand result = poker.winningHand();
+        Assertions.assertNull(result);
     }
 
     @Test
     public void highestOfTwoPairsWins() {
-        Poker poker = new Poker();
-        String[][] hands = {new String[]{"K", "K"}, new String[]{"A", "A"}};
-        String[] result = poker.winningPairFromArray(hands);
-        Assertions.assertArrayEquals(new String[]{"A", "A"}, result);
+        List<Hand> hands = List.of(new Hand(List.of("K", "K")), new Hand(List.of("A", "A")));
+        Poker poker = new Poker(hands);
+        Hand result = poker.winningHand();
+        System.out.println(hands.get(0).getPoints() + " " + hands.get(1).getPoints());
+        Assertions.assertEquals(List.of("A", "A"), result.getCards());
     }
 
     @Test
     public void highestPairInListWins() {
-        Poker poker = new Poker();
-        String[][] hands = {new String[]{"4", "3"}, new String[]{"6", "6"}, new String[]{"7", "7"}, new String[]{"3", "3"}};
-        String[] result = poker.winningPairFromArray(hands);
-        Assertions.assertArrayEquals(new String[]{"7", "7"}, result);
+        List<Hand> hands = List.of(new Hand(List.of("4", "3")), new Hand(List.of("6", "6")),
+                            new Hand(List.of("7", "7")), new Hand(List.of("3", "3")));
+
+        Poker poker = new Poker(hands);
+        Hand result = poker.winningHand();
+        Assertions.assertEquals(List.of("7", "7"), result.getCards());
     }
 
     @Test
     public void noWinnerFromList() {
-        Poker poker = new Poker();
-        String[][] hands = {new String[]{"K", "5"}, new String[]{"3", "7"}, new String[]{"4", "3"},
-                new String[]{"2", "6"}, new String[]{"K", "7"}, new String[]{"A", "3"}};
-        String[] result = poker.winningPairFromArray(hands);
-        Assertions.assertArrayEquals(new String[]{}, result);
+
+        List<Hand> hands = List.of(new Hand(List.of("K", "5")), new Hand(List.of("3", "7")),
+                new Hand(List.of("4", "3")), new Hand(List.of("2", "6")),
+                new Hand(List.of("K", "7")), new Hand(List.of("A", "3")));
+
+        Poker poker = new Poker(hands);
+
+        Hand result = poker.winningHand();
+        Assertions.assertNull(result);
     }
 }

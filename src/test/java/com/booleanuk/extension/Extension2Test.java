@@ -1,54 +1,63 @@
 package com.booleanuk.extension;
-import com.booleanuk.Poker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class Extension2Test {
     @Test
     public void shouldReturnAnEmptyArray() {
-        Poker poker = new Poker();
-        String[][] hands = {new String[]{"K", "5"}, new String[]{"3", "7"},  new String[]{"K", "J", "4"}};
-        String[] result = poker.winningThreeCardHand(hands);
-        Assertions.assertArrayEquals(new String[]{}, result);
+
+        List<Hand> hands = List.of(new Hand(List.of("K", "5")), new Hand(List.of("3", "7")),
+                                   new Hand(List.of("K", "J", "4")));
+
+        Poker poker = new Poker(hands);
+
+        Hand result = poker.winningHand();
+        Assertions.assertNull(result);
     }
 
     @Test
     public void compareTwoHandsOfThree() {
-        Poker poker = new Poker();
-        String[][] hands = {new String[]{"5", "5", "3"}, new String[]{"7", "7", "7"}};
-        String[] result = poker.winningThreeCardHand(hands);
-        Assertions.assertArrayEquals(new String[]{"7", "7", "7"}, result);
+        List<Hand> hands = List.of(new Hand(List.of("5", "5", "3")), new Hand(List.of("7", "7", "7")));
+        Poker poker = new Poker(hands);
+        Hand result = poker.winningHand();
+        Assertions.assertEquals(List.of("7","7","7"), result.getCards());
     }
 
     @Test
     public void compareMultipleHandsOfThree() {
-        Poker poker = new Poker();
-        String[][] hands = {new String[]{"7", "2", "7"}, new String[]{"A", "A", "A"}, new String[]{"5", "5", "3"}};
-        String[] result = poker.winningThreeCardHand(hands);
-        Assertions.assertArrayEquals(new String[]{"A", "A", "A"}, result);
+        List<Hand> hands = List.of(new Hand(List.of("7", "2", "7")), new Hand(List.of("A", "A", "A")),
+                                   new Hand(List.of("5", "5", "3")));
+        Poker poker = new Poker(hands);
+        Hand result = poker.winningHand();
+        Assertions.assertEquals(List.of("A", "A", "A"), result.getCards());
     }
 
     @Test
     public void threeOfAKindBeatsTwoOfAKind() {
-        Poker poker = new Poker();
-        String[][] hands = {new String[]{"7", "2", "7"}, new String[]{"A", "A"}, new String[]{"5", "5", "5"}, new String[]{"4", "5"}};
-        String[] result = poker.winningThreeCardHand(hands);
-        Assertions.assertArrayEquals(new String[]{"5", "5", "5"}, result);
+        List<Hand> hands = List.of(new Hand(List.of("7", "2", "7")), new Hand(List.of("5", "5", "5")),
+                                   new Hand(List.of("4", "5")));
+        Poker poker = new Poker(hands);
+        Hand result = poker.winningHand();
+        Assertions.assertEquals(List.of("5", "5", "5"), result.getCards());
     }
 
     @Test
     public void pairsBeatDisparateThreeOfAKind() {
-        Poker poker = new Poker();
-        String[][] hands = {new String[]{"J", "J"}, new String[]{"9", "9"}, new String[]{"6", "6", "4"}};
-        String[] result = poker.winningThreeCardHand(hands);
-        Assertions.assertArrayEquals(new String[]{"J", "J"}, result);
+        List<Hand> hands = List.of(new Hand(List.of("J", "J")), new Hand(List.of("9", "9")),
+                                   new Hand(List.of("6", "6", "4")));
+        Poker poker = new Poker(hands);
+        Hand result = poker.winningHand();
+        Assertions.assertEquals(List.of("J", "J"), result.getCards());
     }
 
     @Test
     public void pairInAThreeCanWin() {
-        Poker poker = new Poker();
-        String[][] hands = {new String[]{"10", "10", "J"}, new String[]{"9", "9"}, new String[]{"6", "5", "4"}};
-        String[] result = poker.winningThreeCardHand(hands);
-        Assertions.assertArrayEquals(new String[]{"10", "10", "J"}, result);
+        List<Hand> hands = List.of(new Hand(List.of("10", "10", "J")), new Hand(List.of("9", "9")),
+                                   new Hand(List.of("6", "5", "4")));
+        Poker poker = new Poker(hands);
+        Hand result = poker.winningHand();
+        Assertions.assertEquals(List.of("10", "10", "J"), result.getCards());
     }
 }
